@@ -1,0 +1,22 @@
+
+.auth-container{
+    background-image: url("./assets/images/ella-olsson-C1Q3qOTlegg-unsplash 1.png" );
+       background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.bg-layout{
+    background:linear-gradient(rgba(47, 140, 96, 0.63),rgba(0, 0, 0, 0.62));
+    min-height:100vh ;
+}
+.auth-container .logo{
+    width: 200px;
+}
+.fa-eye{
+    right: 5px;
+    top: 10px;
+    cursor:pointer
+}
+.fa-eye:hover{
+    color: brown;
+}
