@@ -20,6 +20,7 @@ const navigate=useNavigate();
 const onSubmit= async(data)=>{
   try {
      await axios.post("https://upskilling-egypt.com:3006/api/v1/Users/Reset",data);
+     toast.success("Password is new");
       navigate("/login");
   } catch (error) {
     toast.error(error.respose.data.message)
@@ -30,7 +31,7 @@ const onSubmit= async(data)=>{
 
   return (
    <>
-   <ToastContainer />
+  
    <div className='auth-container'>
     <div className='container-fluid bg-layout'>
     <div className='row min-vh-100 justify-content-center align-items-center '>

@@ -1,4 +1,7 @@
-
+*{
+    padding: 0;
+    margin: 0;
+}
 .auth-container{
     background-image: url("./assets/images/ella-olsson-C1Q3qOTlegg-unsplash 1.png" );
        background-repeat: no-repeat;
@@ -19,4 +22,23 @@
 }
 .fa-eye:hover{
     color: brown;
+}
+
+    
+.notfoundimg{
+    background-image: url("./assets/images/not-found-bg.png");
+    background-position: center right;
+    background-size: cover;
+    
+  
+}
+
+span .dots::after{
+content: "...";
+width: 15px;
+font-weight: bold;
+color: black;
+position: absolute;
+left: 0;
+bottom: -5px;
 }
