@@ -42,3 +42,32 @@ position: absolute;
 left: 0;
 bottom: -5px;
 }
+
+.css-1wvake5{
+    border-top-right-radius: 58px ; 
+   
+}
+.sidbar-container .ps-sidebar-container{
+background-color: rgba(31, 38, 62, 1);
+color: white;
+border-top-right-radius: 58px ;
+border: 0;
+}
+.sidbar-container .ps-sidebar-container .ps-menuitem-root:not(:first-child) .ps-menu-button:hover{
+background-color: rgba(0, 146, 71, 0.1);
+}
+.sidbar-container .ps-sidebar-container .ps-menuitem-root:first-child .ps-menu-button:hover{
+    background-color: rgba(31, 38, 62, 1); 
+}
+
+.nav-item.nav-link .user-image {
+width: 50px;
+
+}
+
+.headerBackground{
+    background-image: url(./assets/images/header-bg-svg.svg);
+    background-size: cover;
+  
+   
+}
