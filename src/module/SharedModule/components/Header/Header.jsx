@@ -13,7 +13,7 @@ export default function Header({ title, title2, description, image }) {
           </div>
           <div className="col-md-4 text-center ">
             <div className="image ">
-              <img src={image} className="w-50" alt></img>
+              <img src={image} className="w-50" alt="image"></img>
             </div>
           </div>
         </div>

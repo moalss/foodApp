@@ -31,7 +31,7 @@ export default function Navbar({loginData}) {
           </ul>
         </li>
         <li className="nav-item nav-link">
-        <i class="fa-solid fa-bell"></i>
+        <i className="fa-solid fa-bell"></i>
        
       </li>
       </ul>

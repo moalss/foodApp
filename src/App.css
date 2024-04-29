@@ -71,3 +71,7 @@ width: 50px;
   
    
 }
+
+.dropdown-menu{
+    --bs-dropdown-min-width: 5rem !important;
+}
