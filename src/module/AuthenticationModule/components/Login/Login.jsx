@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import logo from "../../../../assets/images/4 3.png";
-import { useForm } from "react-hook-form"
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import logo from "../../../../assets/images/4 3.png";
 
 
 export default function Login({loginInfo}) {
@@ -45,7 +45,7 @@ let navigate=useNavigate();
 
   return (
     <>
-    <ToastContainer />
+    
     <div className="auth-container ">
       <div className="container-fluid bg-layout   ">
         <div className="row vh-100 justify-content-center align-items-center">
@@ -66,7 +66,7 @@ let navigate=useNavigate();
                   <div className="input-group mb-3  ">
                   <span className="input-group-text" id="basic-addon1"><i className="fa fa-envelope"></i></span>
                   <input type="text" className="form-control " placeholder="Enter your E-mail" {...register("email",{
-                    required:"Email is requierd",
+                    required:"Email is required",
                     pattern:{
                       value:/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/i,
                       message:"Invalid Mail"
@@ -78,14 +78,14 @@ let navigate=useNavigate();
                   <span className="input-group-text" id="basic-addon1"><i className="fa fa-key"></i></span>
                   
                   <input type={passwordShown ? "text" : "password"} className="form-control  " placeholder="Enter your password"  {...register("password",{
-                    required:"Password is requerd"
+                    required:"Password is required"
                   })}/>
                   
                   <i className="fa-solid fa-eye position-absolute " onClick={togglePasswordVisiblity}></i>
                   </div>
                  {errors.password&&<p className="alert alert-danger"> {errors.password.message}</p>}
                   <div className="d-flex justify-content-between"> 
-                  <Link  className="text-black text-decoration-none">Register Now?</Link>
+                  <Link to={"/register"} className="text-black text-decoration-none">Register Now?</Link>
                   <Link to="/forgetpass"  className="text-success text-decoration-none">Forgot Password?</Link>
                   </div>
                   <button className="btn bg-success w-100 p-0 text-white my-3">Login</button>

@@ -23,7 +23,7 @@ const navigate =useNavigate()
                 home.
               </p>
               <div className="text-center">
-              <button className="btn btn-success py-3 w-25 " onClick={backToHome}><i class="fa-solid fa-arrow-left"></i> Back to Home</button>
+              <button className="btn btn-success py-3 w-25 " onClick={backToHome}><i className="fa-solid fa-arrow-left"></i> Back to Home</button>
               </div>
             </div>
           </div>

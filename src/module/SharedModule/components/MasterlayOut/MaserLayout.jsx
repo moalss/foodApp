@@ -8,9 +8,9 @@ import home_avatar from "../../../../assets/images/home-avatar.svg"
 export default function MaserLayout({loginData}) {
   return (
 
-    <div className='d-flex'>
-    <div >
-     <SideBar></SideBar>
+    <div className='d-flex   '>
+    <div className='vh-100'>
+     <SideBar ></SideBar>
      </div>
     <div className='w-100'>
     <Navbar loginData={loginData}></Navbar>

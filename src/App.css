@@ -51,8 +51,10 @@ bottom: -5px;
 background-color: rgba(31, 38, 62, 1);
 color: white;
 border-top-right-radius: 58px ;
+
 border: 0;
 }
+
 .sidbar-container .ps-sidebar-container .ps-menuitem-root:not(:first-child) .ps-menu-button:hover{
 background-color: rgba(0, 146, 71, 0.1);
 }
@@ -74,4 +76,11 @@ width: 50px;
 
 .dropdown-menu{
     --bs-dropdown-min-width: 5rem !important;
+}
+.bg-fillRecipes{
+    background-color: rgba(240, 255, 239, 1);
+}
+.imgRecipes{
+    width: 30px;
+
 }

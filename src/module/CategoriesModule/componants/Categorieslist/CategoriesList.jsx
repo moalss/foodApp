@@ -10,6 +10,7 @@ import NoData from "../../../SharedModule/components/NoData/NoData";
 
 import Modal from 'react-bootstrap/Modal';
 import DeleteData from "../../../SharedModule/components/DeleteData/DeleteData";
+import { Link } from "react-router-dom";
 
 
 export default function CategoriesList() {
@@ -23,6 +24,18 @@ export default function CategoriesList() {
 
   const [showDelete, setShowDelete] = useState(false);
   const [showId, setShowId] = useState();
+
+  const [name, setName] = useState("");
+
+  const [pageNumber, setPageNumber] = useState(0);
+  const [totalNumberOfPages, setTotalNumberOfPages] = useState([]);
+
+ 
+  const getCategoryIdValue = (data) => {
+    setName(data.target.value);
+    getCategoriesList(name,pageNumber);
+  };
+ 
 
   const handleDeleteshow = (showId) =>{
    setShowId(showId)
@@ -41,24 +54,29 @@ export default function CategoriesList() {
           },
         }
       );
-      console.log(response);
-      getCategoriesList();
+      
+      getCategoriesList("",pageNumber);
       handleDeleteClose();
     } catch (error) {
-      console.log(error);
+      
     }
   };
-  let getCategoriesList = async () => {
+  let getCategoriesList = async (name,pageNum) => {
     try {
       let response = await axios.get(
-        "https://upskilling-egypt.com:3006/api/v1/Category/?pageSize=8&pageNumber=1",
+        "https://upskilling-egypt.com:3006/api/v1/Category/?pageSize=7&pageNumber="+
+        pageNum,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
+          params:{
+            name:name
+          }
         }
       );
       setCategoriesList(response?.data?.data);
+      setTotalNumberOfPages(Array(response?.data?.totalNumberOfPages).fill().map((_,i)=>i+1))
     } catch (error) {}
   };
 
@@ -72,14 +90,14 @@ let onSubmit= async(data)=>{
       }
     })
     handleClose()
-    getCategoriesList();
+    getCategoriesList(name,pageNumber);
   } catch (error) {
     console.log(error);
   }
 }
 
   useEffect(() => {
-    getCategoriesList();
+    getCategoriesList("",pageNumber);
   }, []);
   return (
     <>
@@ -93,7 +111,7 @@ let onSubmit= async(data)=>{
     <div>
     <div className="input-group mb-3  ">
    
-    <input type="text" className="form-control " placeholder="Enter your E-mail" {...register("name",{
+    <input type="text" className="form-control " placeholder="Category Name" {...register("name",{
       required:"Category is requierd",
      
     })} />
@@ -114,16 +132,13 @@ let onSubmit= async(data)=>{
 
     <Modal  show={showDelete} onHide={handleDeleteClose}>
     <Modal.Header closeButton>
-      <Modal.Title>Add Category</Modal.Title>
+      <Modal.Title>Delete Category</Modal.Title>
     </Modal.Header>
     <Modal.Body>
     
-    <DeleteData item="Category" deleteCategoriesList={deleteCategoriesList}></DeleteData>
+    <DeleteData item="Category" deleteList={deleteCategoriesList}></DeleteData>
     </Modal.Body>
-    <Modal.Footer>
-     
-     
-    </Modal.Footer>
+
   </Modal>
       <Header
         title={"Categories"}
@@ -143,6 +158,18 @@ let onSubmit= async(data)=>{
           </div>
           <div className="col-md-6 d-flex justify-content-end  my-3">
             <button className="btn btn-success" onClick={handleShow}>Add New Category </button>
+          </div>
+          <div className="row ">
+          <div className="col-md-6 ">
+            <div className="input-group mb-1  ">
+              <input
+                type="text"
+                className="form-control "
+                placeholder="Search here with Name"
+                onChange={getCategoryIdValue}
+              />
+            </div>
+          </div>
           </div>
           {categoriesList.length>0?
             <>
@@ -191,6 +218,52 @@ let onSubmit= async(data)=>{
           </>
           :<NoData/>}
         </div>
+        {totalNumberOfPages.length>0? <nav aria-label="Page navigation ">
+        <ul className="pagination">
+          <li className="page-item">
+            <Link disabled={pageNumber === 0?true:false}
+              className="page-link"
+              aria-label="Previous"
+              onClick={() => {
+                pageNumber > 0
+                  ? setPageNumber(pageNumber - 1)
+                  : setPageNumber(0);
+                getCategoriesList(name, pageNumber);
+              }}
+            >
+              <span aria-hidden="true">&laquo;</span>
+            </Link>
+          </li>
+          {totalNumberOfPages.slice(0,10).map((pageNum) => (
+            <li
+              key={pageNum}
+              className="page-item"
+              onClick={() => {
+                getCategoriesList(name, pageNum);
+                setPageNumber(pageNum);
+              }}
+            >
+              <Link className="page-link">{pageNum}</Link>
+            </li>
+          ))}
+
+          <li className="page-item  "  >
+            <Link disabled={pageNumber>totalNumberOfPages.length?true:false}
+              className="page-link"
+              aria-label="Next"
+              onClick={() => {
+                pageNumber < totalNumberOfPages.length
+                  ? setPageNumber(pageNumber + 1)
+                  : setPageNumber(pageNumber);
+                  getCategoriesList(name, pageNumber);
+              }}
+            >
+              <span aria-hidden="true" >&raquo;</span>
+            </Link>
+          </li>
+        </ul>
+      </nav>:''}
+       
       </div>
     </>
   );
