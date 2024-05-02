@@ -4,13 +4,11 @@ import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Dropdown from "react-bootstrap/Dropdown";
 import Table from "react-bootstrap/Table";
 import { useForm } from "react-hook-form";
-import avatar from "../../../../assets/images/header.png";
-import Header from "../../../SharedModule/components/Header/Header";
 import NoData from "../../../SharedModule/components/NoData/NoData";
 
 import Modal from 'react-bootstrap/Modal';
-import DeleteData from "../../../SharedModule/components/DeleteData/DeleteData";
 import { Link } from "react-router-dom";
+import DeleteData from "../../../SharedModule/components/DeleteData/DeleteData";
 
 export default function UserList() {
 
@@ -104,7 +102,7 @@ let onSubmit= async(data)=>{
 }
 
   useEffect(() => {
-    getUsersList("",1,pageNumber);
+    getUsersList("",id,pageNumber);
   }, []);
   return (
     
