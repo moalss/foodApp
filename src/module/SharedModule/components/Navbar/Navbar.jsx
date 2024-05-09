@@ -1,6 +1,9 @@
 import React from 'react'
+import { useContext } from 'react'
 import avatar from "../../../../assets/images/avatar.png"
-export default function Navbar({loginData}) {
+import { AuthContext } from '../../../../context/AuthContext/AuthContext';
+export default function Navbar() {
+  let {loginData}= useContext(AuthContext);
 
   return (
    <>

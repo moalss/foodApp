@@ -9,10 +9,15 @@ import { useForm } from "react-hook-form";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ChangPass from "../../../AuthenticationModule/components/Changpass/ChangPass";
+import { useContext } from "react";
+import { AuthContext } from "../../../../context/AuthContext/AuthContext";
 
 
 export default function SideBar() {
   const [showChangePass, setshowChangePass] = useState(false);
+
+  const {loginData}= useContext(AuthContext);
+ 
   const handleClose = () => setshowChangePass(false);
   const handleShow = () => setshowChangePass(true);
 
@@ -59,13 +64,14 @@ export default function SideBar() {
               {" "}
               Home{" "}
             </MenuItem>
-            <MenuItem
-              icon={<i className="fa-solid fa-users"></i>}
-              component={<Link to="/dashboard/user" />}
-            >
-              {" "}
-              Users{" "}
-            </MenuItem>
+            {loginData?.userGroup==="SuperAdmin"?<MenuItem
+            icon={<i className="fa-solid fa-users"></i>}
+            component={<Link to="/dashboard/user" />}
+          >
+            {" "}
+            Users{" "}
+          </MenuItem>:''}
+            
             <MenuItem
               icon={<i className="fa-solid fa-table-columns"></i>}
               component={<Link to="/dashboard/recipes" />}
@@ -73,13 +79,15 @@ export default function SideBar() {
               {" "}
               Recipes{" "}
             </MenuItem>
+            {loginData?.userGroup==="SuperAdmin"?
             <MenuItem
               icon={<i className="fa-solid fa-table-cells"></i>}
               component={<Link to="/dashboard/categories" />}
             >
               {" "}
               Categories{" "}
-            </MenuItem>
+            </MenuItem>:''}
+
             <MenuItem
               icon={<i className="fa-solid fa-unlock"></i>}
               onClick={handleShow}
@@ -87,6 +95,13 @@ export default function SideBar() {
               {" "}
               Change Password{" "}
             </MenuItem>
+            {loginData?.userGroup==="SuperAdmin"?'': <MenuItem
+              icon={<i className="fa-solid fa-heart"></i>}
+              component={<Link to="/dashboard/favo"/>}
+            >
+              {" "}
+              Favorite{" "}
+            </MenuItem>}
             <MenuItem
               icon={<i className="fa-solid fa-right-from-bracket"></i>}
               onClick={logout}

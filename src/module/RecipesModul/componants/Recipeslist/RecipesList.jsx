@@ -1,28 +1,36 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useContext } from "react";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Dropdown from "react-bootstrap/Dropdown";
 import Modal from "react-bootstrap/Modal";
 import Table from "react-bootstrap/Table";
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+
 import avatar from "../../../../assets/images/header.png";
+import { AuthContext } from "../../../../context/AuthContext/AuthContext";
+import { ToasterContext } from "../../../../context/ToasterContext/ToasterContext";
 import DeleteData from "../../../SharedModule/components/DeleteData/DeleteData";
 import Header from "../../../SharedModule/components/Header/Header";
 import NoData from "../../../SharedModule/components/NoData/NoData";
 
 export default function RecipesList() {
+  let {requestHeader ,baseUrl}= useContext(AuthContext);
+  let {getToasterValue}= useContext(ToasterContext);
+
+
   const navigate = useNavigate();
 
-  const [showId, setShowId] = useState();
+  const [showId, setShowId] = useState(0);
   const [showDelete, setShowDelete] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
 
   const [name, setName] = useState("");
   const [tagId, setTagId] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [pageNumber, setPageNumber] = useState(0);
  
+  const [recipeDetails, setRecipeDetails] = useState([]);
   const [recipesList, setRecipesList] = useState([]);
   const [categoriesList, setCategoriesList] = useState([]);
   const [tagsList, setTagsList] = useState([]);
@@ -45,23 +53,46 @@ export default function RecipesList() {
   const goToAddRecipe = () => {
     navigate("/dashboard/recipedata");
   };
+
+  const handleDetailsshow = (showId) => {
+   
+    getRecipeDetails(showId)
+    setShowDetails(true);
+    
+  };
+  const handleDetailsClose = () => setShowDetails(false);
+
   const handleDeleteshow = (showId) => {
     setShowId(showId);
     setShowDelete(true);
   };
   const handleDeleteClose = () => setShowDelete(false);
 
+
+  let getRecipeDetails = async (id) => {
+    try {
+     const response= await axios.get(
+        `${baseUrl}Recipe/${id}`,
+        {
+          headers: requestHeader,
+        }
+      );
+      setRecipeDetails(response)
+    
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   let deleteRecipesList = async () => {
     try {
       await axios.delete(
-        `https://upskilling-egypt.com:3006/api/v1/Recipe/${showId}`,
+        `${baseUrl}Recipe/${showId}`,
         {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+          headers: requestHeader,
         }
       );
-      toast.success("Recipes is deleted");
+      getToasterValue("success","Recipes is deleted");
       getRecipesList("", "", "", pageNumber);
       handleDeleteClose();
     } catch (error) {
@@ -69,14 +100,31 @@ export default function RecipesList() {
     }
   };
 
+  
+  let addFavorite= async(id)=>{
+    try {
+      let response = await axios.post(
+        `${baseUrl}userRecipe/`,{"recipeId": id},
+        
+        {
+          headers: requestHeader,
+
+          
+        }
+      );
+       getToasterValue("success","added to Favorite") 
+      handleDetailsClose()
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  
   let getTagsList = async () => {
     try {
       let response = await axios.get(
-        "https://upskilling-egypt.com:3006/api/v1/tag",
+        `${baseUrl}tag`,
         {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+          headers: requestHeader,
         }
       );
       setTagsList(response?.data);
@@ -85,11 +133,9 @@ export default function RecipesList() {
   let getCategoriesList = async () => {
     try {
       let response = await axios.get(
-        "https://upskilling-egypt.com:3006/api/v1/Category",
+        `${baseUrl}Category`,
         {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+          headers: requestHeader,
         }
       );
       setCategoriesList(response?.data?.data);
@@ -99,12 +145,10 @@ export default function RecipesList() {
   let getRecipesList = async (name, tagId, categoryId, pageNum) => {
     try {
       let response = await axios.get(
-        "https://upskilling-egypt.com:3006/api/v1/Recipe/?pageSize=7&pageNumber=" +
+        `${baseUrl}Recipe/?pageSize=7&pageNumber=` +
           pageNum,
         {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+          headers: requestHeader,
           params: {
             name: name,
             tagId: tagId,
@@ -127,6 +171,7 @@ export default function RecipesList() {
     getRecipesList("", "", "", pageNumber);
     getCategoriesList();
     getTagsList();
+    
   }, []);
   return (
     <>
@@ -136,6 +181,26 @@ export default function RecipesList() {
         </Modal.Header>
         <Modal.Body>
           <DeleteData item="Recipe" deleteList={deleteRecipesList}></DeleteData>
+        </Modal.Body>
+      </Modal>
+
+      <Modal show={showDetails} onHide={handleDetailsClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Recipe Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="container-fluid">
+            <div className="w-75 text-center">
+            <img className="img-fluid" src={
+              "https://upskilling-egypt.com:3006/" + recipeDetails?.data?.imagePath
+            } alt="Recipes Image"></img>
+            </div>
+
+            <div>
+            <p> {recipeDetails?.data?.description}</p>
+            </div>
+            <button className="btn btn-success" onClick={()=>addFavorite(recipeDetails?.data?.id)}>add to Favorite</button>
+          </div>
         </Modal.Body>
       </Modal>
 
@@ -253,6 +318,9 @@ export default function RecipesList() {
                                 <button className="btn btn-warning  mx-1">
                                   <i className="fa-solid fa-edit"></i>
                                 </button>
+                                <button className="btn btn-success  mx-1" onClick={()=>handleDetailsshow(elem.id)}>
+                          <i className="fa-solid fa-eye" ></i>
+                          </button>
                               </div>
                             </Dropdown.Menu>
                           </Dropdown>

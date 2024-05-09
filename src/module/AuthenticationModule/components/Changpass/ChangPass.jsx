@@ -5,7 +5,13 @@ import logo from "../../../../assets/images/4 3.png";
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
+import { AuthContext } from '../../../../context/AuthContext/AuthContext';
+import { ToasterContext } from '../../../../context/ToasterContext/ToasterContext';
+import { useContext } from 'react';
 export default function ChangPass() {
+  let {loginInfo ,baseUrl,requestHeader}= useContext(AuthContext);
+  let {getToasterValue}= useContext(ToasterContext); 
+
   const [values, setValues] = useState(false);
   const handleClickShowPassword = (fieldName) => {
     setValues({
@@ -24,18 +30,16 @@ export default function ChangPass() {
     
     try {
       let response = await axios.put(
-        "https://upskilling-egypt.com:3006/api/v1/Users/ChangePassword",
+        `${baseUrl}Users/ChangePassword`,
         data, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+          headers:requestHeader,
         }
       );
 
-      toast.success(response.data.message, { autoClose: 500 });
+      getToasterValue("success",response.data.message);
       handleClose();
     } catch (error) {
-      toast.error(error.response.data.message);
+      getToasterValue("error",error.response.data.message);
     }
   };
   return (

@@ -1,14 +1,20 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+
+
 import logo from "../../../../assets/images/4 3.png";
+import { AuthContext } from "../../../../context/AuthContext/AuthContext";
+import { ToasterContext } from "../../../../context/ToasterContext/ToasterContext";
 
 
-export default function Login({loginInfo}) {
+export default function Login() {
  
+  let {loginInfo ,baseUrl}= useContext(AuthContext);
+  let {getToasterValue}= useContext(ToasterContext); 
+
 const [passwordShown, setPasswordShown] = useState(false);
 const togglePasswordVisiblity = () => {
   setPasswordShown(passwordShown ? false : true);
@@ -24,17 +30,17 @@ let navigate=useNavigate();
   const onSubmit=  async (data) =>{
     
     try {
-      let response=  await axios.post("https://upskilling-egypt.com:3006/api/v1/Users/Login",data);
+      let response=  await axios.post(`${baseUrl}Users/Login`,data);
      
       localStorage.setItem("token", response.data.token);
       
-      
+    
       loginInfo();
-      toast.success("Login",{autoClose: 500,});
+      getToasterValue("success","Login")
       navigate("/dashboard")
     } catch (error) {
+      getToasterValue("error",error.response.data.message)
       
-      toast.error(error.response.data.message)
     }
   } 
   

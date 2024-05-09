@@ -1,13 +1,18 @@
 import axios from "axios";
 import React from "react";
+import { useContext } from "react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import logo from "../../../../assets/images/4 3.png";
+import { AuthContext } from "../../../../context/AuthContext/AuthContext";
+import { ToasterContext } from "../../../../context/ToasterContext/ToasterContext";
 
 export default function Register() {
+  let {loginInfo ,baseUrl}= useContext(AuthContext);
+  let {getToasterValue}= useContext(ToasterContext); 
   const [passwordShown, setPasswordShown] = useState(false);
   const togglePasswordVisiblity = () => {
     setPasswordShown(passwordShown ? false : true);
@@ -35,13 +40,13 @@ return formdata;
   }
   const onSubmit = async (data) => {
         try {
-      let response=  await axios.post("https://upskilling-egypt.com:3006/api/v1/Users/Register",appendToFormData(data));
+      let response=  await axios.post(`${baseUrl}Users/Register`,appendToFormData(data));
       
      
-      toast.success(response.data.message);
+      getToasterValue("success",response.data.message);
       navigate("/verifyaccount")
     } catch (error) {
-      toast.error(error.response.data.message)
+      getToasterValue("error",error.response.data.message)
     }
   };
 

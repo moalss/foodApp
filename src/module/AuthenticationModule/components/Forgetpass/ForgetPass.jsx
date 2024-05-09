@@ -5,7 +5,12 @@ import logo from "../../../../assets/images/4 3.png";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../../../../context/AuthContext/AuthContext";
+import { ToasterContext } from "../../../../context/ToasterContext/ToasterContext";
 export default function ForgetPass() {
+  let {loginInfo ,baseUrl}= useContext(AuthContext);
+  let {getToasterValue}= useContext(ToasterContext); 
   let navigate=useNavigate();
   const {
     register,
@@ -15,12 +20,12 @@ export default function ForgetPass() {
 
   let onSubmit = async(data) => {
       try {
-        let response= await axios.post("https://upskilling-egypt.com:3006/api/v1/Users/Reset/Request",data);
-            // toast.success(response.data.message);
+        let response= await axios.post(`${baseUrl}Users/Reset/Request`,data);
+           getToasterValue("success",response.data.message);
           navigate("/resetpass")
 
       } catch (error) {
-        toast.error(error.response.data.message)
+        getToasterValue("error",error.response.data.message)
       }
 
   };

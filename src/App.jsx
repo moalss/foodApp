@@ -18,29 +18,16 @@ import AuthLayout from "./module/SharedModule/components/Authlayout/AuthLayout";
 import MaserLayout from "./module/SharedModule/components/MasterlayOut/MaserLayout";
 import Notfound from "./module/SharedModule/components/Notfound/Notfound";
 import ProtectedRoute from "./module/SharedModule/components/protectedRoute/ProtectedRoute";
+import Favo from "./module/UserModule/components/Favo/Favo";
 import UserList from "./module/UserModule/components/Userlist/UserList";
 function App() {
  
- let [loginData,setLoginData]=useState(null);
 
- let loginInfo=()=>{
-  let tokenInfo=localStorage.getItem("token");
-    let decodeTokenInfo=jwtDecode(tokenInfo);
-        setLoginData(decodeTokenInfo);
- }
-useEffect(()=>{
-if(localStorage.getItem("token")){
-  loginInfo();
-
-}
-
-
-},[]);
 
   let routes = createBrowserRouter([
     {
       path: 'dashboard',
-      element:<ProtectedRoute loginData={loginData}> <MaserLayout loginData={loginData}/></ProtectedRoute>,
+      element:<ProtectedRoute > <MaserLayout /></ProtectedRoute>,
       errorElement: <Notfound/>,
       children: [
         {path:"",element:<Dashboard/>},
@@ -49,19 +36,20 @@ if(localStorage.getItem("token")){
        { path:"recipes",element:<RecipesList></RecipesList>} ,
        { path:"recipedata",element:<RecipeData></RecipeData>} ,
        { path:"categories",element:<CategoriesList></CategoriesList>} ,
-
+       { path:"favo",element:<Favo/>}
       ],
     },
     {
       path:"/" ,element:<AuthLayout/>,errorElement:<Notfound/>,
       children:[
-        {path:"",element:<Login loginInfo={loginInfo}/>},
-        {path:"login",element:<Login loginInfo={loginInfo}/>},
+        {path:"",element:<Login/>},
+        {path:"login",element:<Login />},
         {path:"forgetpass",element:<ForgetPass/>} ,
        { path:"changepass",element:<ChangPass/>} ,
        { path:"resetpass",element:<ResetPass/>} ,
        { path:"register",element:<Register/>} ,
        { path:"verifyaccount",element:<VerifyAccount/>} ,
+       ,
       ]
     },
   ]);

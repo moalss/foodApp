@@ -1,12 +1,17 @@
 import axios from 'axios';
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import {  toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import logo from "../../../../assets/images/4 3.png";
+import { AuthContext } from '../../../../context/AuthContext/AuthContext';
+import { ToasterContext } from '../../../../context/ToasterContext/ToasterContext';
 
 export default function ResetPass() {
+  let {loginInfo ,baseUrl}= useContext(AuthContext);
+  let {getToasterValue}= useContext(ToasterContext); 
+
   const [passwordShown, setPasswordShown] = useState(false);
   const [ConfirmpasswordShown, setConfirmPasswordShown] = useState(false);
   const togglePasswordVisiblity = () => {
@@ -19,11 +24,11 @@ const {register,handleSubmit,watch,formState:{errors}}=useForm();
 const navigate=useNavigate();
 const onSubmit= async(data)=>{
   try {
-     await axios.post("https://upskilling-egypt.com:3006/api/v1/Users/Reset",data);
-     toast.success("Password is new");
+     await axios.post(`${baseUrl}Users/Reset`,data);
+     getToasterValue("success","Password is new");
       navigate("/login");
   } catch (error) {
-    toast.error(error.respose.data.message)
+    getToasterValue("error",error.respose.data.message);
     
   }
 }
